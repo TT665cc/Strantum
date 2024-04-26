@@ -1,0 +1,117 @@
+import math
+
+import folium  # import du module pour générer une carte
+from pyroutelib3 import Router  # import des fonctionnalités pour générer un itinéraire
+import requests
+import gpxpy
+
+
+
+def recup_liste_coord(fichier):
+
+    res = []
+
+    # Chemin vers votre fichier GPX
+    fichier_gpx = fichier
+
+    # Ouvrir le fichier GPX
+    with open(fichier_gpx, 'r') as gpx_file:
+        gpx = gpxpy.parse(gpx_file)
+
+    for track in gpx.tracks:
+        for segment in track.segments:
+            for point in segment.points:
+               res.append([point.latitude, point.longitude, point.elevation])
+
+    return res
+
+def vent(c):
+    latitude, longitude = c
+    base_url = "https://api.openweathermap.org/data/2.5/weather"
+    params = {
+        "lat": latitude,
+        "lon": longitude,
+        "appid": "1c0335d4b300e187cb7017cffe01f6e1",
+        "units": "metric"  # Utilisez "imperial" pour les unités impériales
+    }
+    response = requests.get(base_url, params=params)
+    data = response.json()
+    return data["wind"], data
+
+def altitude(c):
+    latitude, longitude = c
+    url = f"https://wxs.ign.fr/calcul/alti/rest/elevation.json?lon={longitude}&lat={latitude}&zonly=true"
+    response = requests.get(url)
+    data = response.json()
+    return data['elevations'][0]
+
+def itineraire(Depart, Arrivee, mode):
+    """
+    génère une carte représentant un itinéraire avec :
+    Depart : coordonnées GPS du point de départ
+    Arrivee : coordonnées GPS du point d'arrivée
+    mode : mode de transport ("car","cycle","foot","horse","tram","train")
+    """
+
+    # Calcul des coordonnées du point central de la carte
+    # (au milieu du segment joignant Depart et Arrivee)
+
+    Vue = ((Depart[0] + Arrivee[0]) / 2, (Depart[1] + Arrivee[1]) / 2)
+
+    # Réglage du zoom initial
+    zoom = 15
+
+    # Génération de la carte
+    Carte = folium.Map(Vue, zoom_start=zoom)
+
+    # Placement des marqueurs des points de Départ et d'Arrivée
+    folium.Marker(Depart, popup="Départ").add_to(Carte)
+    folium.Marker(Arrivee, popup="Arrivée").add_to(Carte)
+
+    try:
+        # Génération de l'itinéraire avec le mode de transport choisi
+        router = Router(mode)
+        D = router.findNode(*Depart)
+        A = router.findNode(*Arrivee)
+
+        routeLatLons = [Depart, Arrivee]
+        status, route = router.doRoute(D, A)
+        print(status)
+        print(route)
+        if status == 'success':
+            routeLatLons = list(map(router.nodeLatLon, route))
+            print(routeLatLons)
+
+        # Tracé de l'itinéraire sur la carte
+        folium.PolyLine(routeLatLons, color="magenta", weight=2.5, opacity=1).add_to(Carte)
+
+    except:
+        # Si l'itinéraire ne peut pas être généré: affichage d'un message d'erreur
+        print("La carte a été créée mais impossible de générer l'itinéraire demandé")
+
+    # La fonction renvoie la carte créée
+    return routeLatLons, Carte
+
+
+chemin, carte_test = itineraire([48.121348, -1.654567], [48.115176, -1.679909], "car")
+carte_test.save("carte_points.html")
+
+
+def calcul_energie(chemin, masse, E):
+    n = len(chemin)
+    alt = [altitude(chemin[i]) for i in range(n // 10)]
+    wind = [vent(chemin[i]) for i in range(n // 10)]
+    res = 0
+    for i in range((n // 10) - 1):
+        res += E(alt[i], alt[i + 1], wind[i], wind[i + 1], masse)
+    return res
+
+
+def recuit_simule(depart, arrivee, dist_obj):
+    res = itineraire(depart, arrivee, "cyle")
+    Tmin = 1
+    K = len(res)
+    for k in range((K//Tmin)-1):
+        T = K/(k+1)
+        a, b = (0,0)
+    return res
