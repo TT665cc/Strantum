@@ -161,7 +161,7 @@ class _Page3State extends State<Page3> {
               Expanded(
                 child: Container(
                   padding: EdgeInsets.all(16.0), // Espacement autour de l'image
-                  child: Image.asset('assets/images/your_image.png', fit: BoxFit.cover),
+                  child: Image.asset('assets/images/map1.png', fit: BoxFit.cover),
                 ),
               ),
             ],
