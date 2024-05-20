@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'custom_box.dart';
+import 'new_activity_page.dart';  // Importez la nouvelle page
 
 class Page1 extends StatelessWidget {
   const Page1({super.key});
@@ -17,7 +18,7 @@ class Page1 extends StatelessWidget {
             const SizedBox(width: 8),
             Image.asset(
               'assets/images/fire.png',
-              height: 44,
+              height: 24,
             ),
           ],
         ),
@@ -53,6 +54,19 @@ class Page1 extends StatelessWidget {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const NewActivityPage()),
+          );
+        },
+        child: Icon(Icons.add),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0), // Carré avec coins arrondis
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
