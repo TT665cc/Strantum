@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'custom_box.dart';
-import 'new_activity_page.dart';  // Importez la nouvelle page
+import 'new_activity_page.dart'; // Importez la nouvelle page
 
 class Page1 extends StatelessWidget {
   const Page1({super.key});
+
+  double _convertToDouble(dynamic value) {
+    if (value is String) {
+      return double.tryParse(value) ?? 0.0;
+    } else if (value is num) {
+      return value.toDouble();
+    } else {
+      return 0.0;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,41 +29,42 @@ class Page1 extends StatelessWidget {
             const SizedBox(width: 8),
             Image.asset(
               'assets/images/fire.png',
-              height: 24,
+              height: 50,
             ),
           ],
         ),
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16.0),
-        children: const [
-          CustomBox(
-            title: 'Course en soirée',
-            description: 'Ceci est une description de la boîte.',
-            imagePath: 'assets/images/map1.png',
-            distance: 21,
-            altitude: 200,
-            speed: 15,
-          ),
-          SizedBox(height: 16.0),
-          CustomBox(
-            title: 'Balade matinale',
-            description: 'Ceci est une autre description de la boîte.',
-            imagePath: 'assets/images/map2.png',
-            distance: 3,
-            altitude: 100,
-            speed: 10,
-          ),
-          SizedBox(height: 16.0),
-          CustomBox(
-            title: 'Voyage en montagne',
-            description: 'Une description supplémentaire pour la boîte.',
-            imagePath: 'assets/images/map3.png',
-            distance: 7,
-            altitude: 300,
-            speed: 12,
-          ),
-        ],
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('Activities').snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          var activities = snapshot.data!.docs;
+
+          return ListView.builder(
+            padding: const EdgeInsets.all(16.0),
+            itemCount: activities.length,
+            itemBuilder: (context, index) {
+              var activity = activities[index];
+
+              return Column(
+                children: [
+                  CustomBox(
+                    title: activity['title'],
+                    description: activity['description'],
+                    imagePath: activity['image'],
+                    distance: _convertToDouble(activity['distance']),
+                    altitude: _convertToDouble(activity['altitude']),
+                    speed: _convertToDouble(activity['wind']),
+                  ),
+                  SizedBox(height: 16.0),
+                ],
+              );
+            },
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

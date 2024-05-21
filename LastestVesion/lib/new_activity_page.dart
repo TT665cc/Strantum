@@ -43,13 +43,6 @@ class _NewActivityPageState extends State<NewActivityPage> {
           'wind': "${_windInputController.text}",
         }
       );
-
-      print('Titre: ${_firstInputController.text}');
-      print('Description: ${_secondInputController.text}');
-      print('Image: ${_thirdInputController.text}');
-      print('Image: ${_distanceInputController.text}');
-      print('Image: ${_altitudeInputController.text}');
-      print('Image: ${_windInputController.text}');
       FocusScope.of(context).unfocus(); // Ferme le clavier
       _showSnackBar(); // Affiche le message "traitement en cours"
     }
