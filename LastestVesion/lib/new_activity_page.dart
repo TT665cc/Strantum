@@ -16,7 +16,6 @@ class _NewActivityPageState extends State<NewActivityPage> {
   final TextEditingController _distanceInputController = TextEditingController();
   final TextEditingController _altitudeInputController = TextEditingController();
   final TextEditingController _windInputController = TextEditingController();
-  double _sliderValue = 6.0;
 
   @override
   void dispose() {
@@ -31,18 +30,15 @@ class _NewActivityPageState extends State<NewActivityPage> {
 
   void _printInputValues() {
     if (_formKey.currentState!.validate()) {
-
       CollectionReference activitiesRef = FirebaseFirestore.instance.collection("Activities");
-      activitiesRef.add(
-        {
-          'title': "${_firstInputController.text}",
-          'description': "${_secondInputController.text}",
-          'image': "${_thirdInputController.text}",
-          'distance': "${_distanceInputController.text}",
-          'altitude': "${_altitudeInputController.text}",
-          'wind': "${_windInputController.text}",
-        }
-      );
+      activitiesRef.add({
+        'title': _firstInputController.text,
+        'description': _secondInputController.text,
+        'image': _thirdInputController.text,
+        'distance': _distanceInputController.text,
+        'altitude': _altitudeInputController.text,
+        'wind': _windInputController.text,
+      });
       FocusScope.of(context).unfocus(); // Ferme le clavier
       _showSnackBar(); // Affiche le message "traitement en cours"
     }
@@ -83,101 +79,17 @@ class _NewActivityPageState extends State<NewActivityPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: TextFormField(
-                  controller: _firstInputController,
-                  decoration: InputDecoration(
-                    hintText: 'Titre',
-                    border: InputBorder.none,
-                  ),
-                  validator: _validateInput,
-                ),
-              ),
+              _buildInputField(_firstInputController, 'Titre'),
               SizedBox(height: 16.0),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: TextFormField(
-                  controller: _secondInputController,
-                  decoration: InputDecoration(
-                    hintText: 'Description',
-                    border: InputBorder.none,
-                  ),
-                  validator: _validateInput,
-                ),
-              ),
+              _buildInputField(_secondInputController, 'Description'),
               SizedBox(height: 16.0),
-              Container (
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: TextFormField(
-                  controller: _thirdInputController,
-                  decoration: InputDecoration(
-                    hintText: 'image',
-                    border: InputBorder.none,
-                  ),
-                  validator: _validateInput,
-                ),
-              ),
+              _buildInputField(_thirdInputController, 'Image'),
               SizedBox(height: 16.0),
-              Container (
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: TextFormField(
-                  controller: _distanceInputController,
-                  decoration: InputDecoration(
-                    hintText: 'Distance',
-                    border: InputBorder.none,
-                  ),
-                  validator: _validateInput,
-                ),
-              ),
+              _buildInputField(_distanceInputController, 'Distance'),
               SizedBox(height: 16.0),
-              Container (
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: TextFormField(
-                  controller: _altitudeInputController,
-                  decoration: InputDecoration(
-                    hintText: 'Altitude',
-                    border: InputBorder.none,
-                  ),
-                  validator: _validateInput,
-                ),
-              ),
+              _buildInputField(_altitudeInputController, 'Altitude'),
               SizedBox(height: 16.0),
-              Container (
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: TextFormField(
-                  controller: _windInputController,
-                  decoration: InputDecoration(
-                    hintText: 'Altitude équivalente vent',
-                    border: InputBorder.none,
-                  ),
-                  validator: _validateInput,
-                ),
-              ),
+              _buildInputField(_windInputController, 'Altitude équivalente vent'),
               SizedBox(height: 16.0),
               Center(
                 child: ElevatedButton(
@@ -210,6 +122,24 @@ class _NewActivityPageState extends State<NewActivityPage> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildInputField(TextEditingController controller, String hintText) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: TextFormField(
+        controller: controller,
+        decoration: InputDecoration(
+          hintText: hintText,
+          border: InputBorder.none,
+        ),
+        validator: _validateInput,
       ),
     );
   }

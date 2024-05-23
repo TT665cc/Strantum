@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:latlong2/latlong.dart';
-import 'package:strantum/show_itineraire.dart';
 
 class Page3 extends StatefulWidget {
   const Page3({Key? key}) : super(key: key);
@@ -24,40 +22,16 @@ class _Page3State extends State<Page3> {
 
   void _show_itineraire() {
     if (_formKey.currentState!.validate()) {
+      print('First Input: ${_firstInputController.text}');
+      print('Second Input: ${_secondInputController.text}');
       FocusScope.of(context).unfocus(); // Ferme le clavier
-      final startPoint = _parseCoordinates(_firstInputController.text);
-      final endPoint = _parseCoordinates(_secondInputController.text);
-
-      if (startPoint != null && endPoint != null) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ShowItineraire(
-              startPoint: startPoint,
-              endPoint: endPoint,
-            ),
-          ),
-        );
-      } else {
-        _showSnackBar('Coordonnées invalides');
-      }
+      _showSnackBar(); // Affiche le message "traitement en cours"
     }
   }
 
-  LatLng? _parseCoordinates(String input) {
-    try {
-      final parts = input.split(',');
-      final latitude = double.parse(parts[0].trim());
-      final longitude = double.parse(parts[1].trim());
-      return LatLng(latitude, longitude);
-    } catch (e) {
-      return null;
-    }
-  }
-
-  void _showSnackBar(String message) {
+  void _showSnackBar() {
     final snackBar = SnackBar(
-      content: Text(message),
+      content: Text('Traitement en cours'),
       duration: Duration(seconds: 2),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -104,7 +78,7 @@ class _Page3State extends State<Page3> {
                 child: TextFormField(
                   controller: _firstInputController,
                   decoration: InputDecoration(
-                    hintText: 'Enter your first input (lat, lng)',
+                    hintText: 'Enter your first input',
                     border: InputBorder.none,
                   ),
                   validator: _validateInput,
@@ -120,7 +94,7 @@ class _Page3State extends State<Page3> {
                 child: TextFormField(
                   controller: _secondInputController,
                   decoration: InputDecoration(
-                    hintText: 'Enter your second input (lat, lng)',
+                    hintText: 'Enter your second input',
                     border: InputBorder.none,
                   ),
                   validator: _validateInput,

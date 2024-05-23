@@ -3,7 +3,7 @@ import 'home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
@@ -25,6 +25,15 @@ class MyApp extends StatelessWidget {
             fontSize: 35,
             fontFamily: 'Poppins',
           ),
+          headlineMedium: TextStyle(
+            fontSize: 24,
+            fontFamily: 'Poppins',
+          ),
+          headlineSmall: TextStyle(
+            fontSize: 18,
+            fontFamily: 'Poppins',
+          ),
+          // Ajoutez d'autres styles si nécessaire
         ),
       ),
       home: const HomePage(),

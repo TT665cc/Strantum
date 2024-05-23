@@ -36,8 +36,8 @@ class _HomePageState extends State<HomePage> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: ImageIcon(AssetImage('assets/images/nav1.png')),
-            label: 'Training',
+            icon: ImageIcon(AssetImage('assets/images/medaille.png')),
+            label: 'Competitions',
           ),
           BottomNavigationBarItem(
             icon: ImageIcon(AssetImage('assets/images/nav3.png')),

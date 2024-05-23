@@ -10,12 +10,12 @@ class Page2 extends StatelessWidget {
         title: Row(
           children: [
             Text(
-              "Training",
+              "Compétitions",
               style: Theme.of(context).textTheme.headlineLarge,
             ),
             const SizedBox(width: 8),
             Image.asset(
-              'assets/images/nav1.png',
+              'assets/images/medaille.png',
               height: 50,
             ),
           ],
