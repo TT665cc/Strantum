@@ -99,3 +99,8 @@ Ce doc est une breve explication de comment :
     --> Pour les plans d'entraînement on peut soit les fournir gratuitement des entraînements (ce qui n'est fait nulle part ailleurs) soit (ou les 2) laisser la possibilité aux utilisateurs de créer/personnaliser
         leurs entraînements. Ils peuvent également les vendre sur la platforme et nous on touche une commission (ex: Eliud Kipchoge qui t'apprend à courir un marathon mais ça peut aussi être des coach locaux à qui on donne de la visibilité).
 
+--> Gestion météo: avant la course, indiquer sur le chemin approximatif, selon la vitesse estimée, l'appli indique si on se prend un orage ou pas (et si oui, à quel endroit + pdt cb de tps)
+    Si autour de chez soi le temps est vrm limite pr une sortie en vélo, l'appli peut tracer un chemin qui "esquive" les orages, en tennant compte de l'évolution météorologique de la journée (même plusieurs jours si avec trail par ex)
+    L'appli peut également nous indiquer le moment de la journée opportun pour aller faire du vélo (avec le meilleur endroit) [Vrm utile car en vrai très difficile pr un individu d'anticiper à un tel niveau]
+
+--> Pouvoir imprimer une "feuille de route" en différentss formats
